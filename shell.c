@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+char running = 'y';
+
 void execute(char *path, char **args){
   int pid = fork();
   //Processo filho
@@ -13,6 +15,8 @@ void execute(char *path, char **args){
   }else{
       wait(NULL);
       printf("Filho terminou execução\n");
+      printf("Quer executar outro comando? (y/n)\n");
+      scanf("%c",&running);
   }
 
 }
@@ -24,45 +28,48 @@ int main(void)
   int nmArgs;
   char *path= "/bin/";
   char fullpath[20];
+  while(running=='y'){
 
-  printf("Qual vai ser o comando a ser executado?");
+    printf("Qual vai ser o comando a ser executado?");
 
-  //Passo 2
-  fgets(command, 256, stdin);
-  size_t length = strlen(command);
-  if (command[length - 1] == '\n'){
-    command[length - 1] = '\0';
-  }
-  argList[0] = command;
-  strcpy(fullpath, path);
-  strcat(fullpath, argList[0]);
-  // printf("%s aqui", fullpath);
-
-  //Passo 3
-  printf("\nOk, vamos executar %s,gostaria de utilzar quantos argumentos?", command);
-  //Passo 4
-  scanf("%d",&nmArgs);
-
-  //Passo 5
-  for(int i=0;i<=nmArgs;i++){
-    char *arg = malloc(256);
-    printf("Diginte o %d argumento.\n", i);
-    fgets(arg, 256, stdin);
-    size_t length = strlen(arg);
-    if (arg[length - 1] == '\n'){arg[length - 1] = '\0';}
-    if(i!=0){
-      argList[i] = arg;
+    //Passo 2
+    fgets(command, 256, stdin);
+    size_t length = strlen(command);
+    if (command[length - 1] == '\n'){
+      command[length - 1] = '\0';
     }
+    argList[0] = command;
+    strcpy(fullpath, path);
+    strcat(fullpath, argList[0]);
+    // printf("%s aqui", fullpath);
+
+    //Passo 3
+    printf("\nOk, vamos executar %s,gostaria de utilzar quantos argumentos?", command);
+    //Passo 4
+    scanf("%d",&nmArgs);
+
+    //Passo 5
+    for(int i=0;i<=nmArgs;i++){
+      char *arg = malloc(256);
+      printf("Diginte o %d argumento.\n", i);
+      fgets(arg, 256, stdin);
+      size_t length = strlen(arg);
+      if (arg[length - 1] == '\n'){arg[length - 1] = '\0';}
+      if(i!=0){
+        argList[i] = arg;
+      }
+    }
+    argList[nmArgs+1]=NULL;
+
+    // for(int i=0;i<=nmArgs;i++){
+    //   printf("%d\n", i);
+    //   printf("%s\n", argList[i]);
+    // }
+
+    //Passo 6
+    execute(fullpath,argList);
   }
-  argList[nmArgs+1]=NULL;
 
-  // for(int i=0;i<=nmArgs;i++){
-  //   printf("%d\n", i);
-  //   printf("%s\n", argList[i]);
-  // }
-
-  //Passo 6
-  execute(fullpath,argList);
 
   return 0;
 }

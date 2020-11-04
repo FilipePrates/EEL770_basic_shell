@@ -14,9 +14,11 @@ void execute(char *path, char **args){
   //Processo Pai
   }else{
       wait(NULL);
-      printf("Filho terminou execução\n");
-      printf("Quer executar outro comando? (y/n)\n");
+      printf("Processo filho terminou execução.\n");
+      printf("Quer executar outro comando? (y/n).\n");
       scanf("%c",&running);
+      getchar();
+
   }
 
 }
@@ -30,7 +32,7 @@ int main(void)
   char fullpath[20];
   while(running=='y'){
 
-    printf("Qual vai ser o comando a ser executado?");
+    printf("Qual vai ser o comando a ser executado?\n");
 
     //Passo 2
     fgets(command, 256, stdin);
@@ -44,7 +46,7 @@ int main(void)
     // printf("%s aqui", fullpath);
 
     //Passo 3
-    printf("\nOk, vamos executar %s,gostaria de utilzar quantos argumentos?", command);
+    printf("\nOk, vamos executar %s, gostaria de utilzar quantos argumentos?\n", command);
     //Passo 4
     scanf("%d",&nmArgs);
 
@@ -61,15 +63,9 @@ int main(void)
     }
     argList[nmArgs+1]=NULL;
 
-    // for(int i=0;i<=nmArgs;i++){
-    //   printf("%d\n", i);
-    //   printf("%s\n", argList[i]);
-    // }
-
     //Passo 6
     execute(fullpath,argList);
+
   }
-
-
   return 0;
 }
